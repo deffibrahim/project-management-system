@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Project Management System</title>
+    <style>
+        :root {
+            --bg-body: #faf6f0;
+            --bg-card: #ffffff;
+            --text-main: #2c2523;
+            --text-muted: #786f68;
+            --primary: #d45937;
+            --primary-hover: #ba4726;
+            --primary-focus: rgba(212, 89, 55, 0.25);
+            --border: #e6dfd5;
+            --input-bg: #fcf9f5;
+            --card-shadow: 0 20px 45px rgba(60, 40, 25, 0.08);
+            --danger-bg: #fdf2f2;
+            --danger-text: #b83232;
+            --danger-border: #f8b4b4;
+            --success-bg: #edf7ed;
+            --success-text: #2e7d32;
+            --success-border: #b7dfb9;
+            --chip-bg: #f3ede2;
+            --chip-hover: #ebe3d6;
+            --grad-page:
+                radial-gradient(1000px 520px at 85% -10%, rgba(212, 89, 55, 0.18), transparent 62%),
+                radial-gradient(900px 520px at -10% 110%, rgba(217, 119, 6, 0.14), transparent 62%),
+                linear-gradient(160deg, #fdf9f4 0%, #f7ebdf 100%);
+            --grad-card: linear-gradient(150deg, #ffffff 0%, #fdf6ef 100%);
+            --grad-primary: linear-gradient(135deg, #e8744a 0%, #d45937 48%, #b94425 100%);
+        }
+
+        body[data-theme="dark"] {
+            --bg-body: #181514;
+            --bg-card: #24201e;
+            --text-main: #f5ede6;
+            --text-muted: #b8aea5;
+            --primary: #e06d4e;
+            --primary-hover: #eb7f63;
+            --primary-focus: rgba(224, 109, 78, 0.35);
+            --border: #3d3631;
+            --input-bg: #1c1816;
+            --card-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+            --danger-bg: rgba(239, 68, 68, 0.12);
+            --danger-text: #fca5a5;
+            --danger-border: rgba(239, 68, 68, 0.3);
+            --success-bg: rgba(34, 197, 94, 0.12);
+            --success-text: #86efac;
+            --success-border: rgba(34, 197, 94, 0.3);
+            --chip-bg: #2d2724;
+            --chip-hover: #38312d;
+            --grad-page:
+                radial-gradient(1000px 540px at 85% -12%, rgba(224, 109, 78, 0.24), transparent 62%),
+                radial-gradient(900px 520px at -10% 110%, rgba(245, 158, 11, 0.12), transparent 62%),
+                linear-gradient(160deg, #1d1917 0%, #121010 100%);
+            --grad-card: linear-gradient(150deg, #2b2623 0%, #211d1b 100%);
+            --grad-primary: linear-gradient(135deg, #f0825f 0%, #e06d4e 48%, #c4532f 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            background-image: var(--grad-page);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .theme-toggle-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .theme-toggle-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .login-card {
+            background: var(--bg-card);
+            background-image: var(--grad-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 38px 34px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .brand-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            background: var(--grad-primary);
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+            box-shadow: 0 8px 18px rgba(212, 89, 55, 0.30);
+        }
+
+        .brand-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .brand-header p {
+            font-size: 13.5px;
+            color: var(--text-muted);
+        }
+
+        .alert-box {
+            padding: 12px 14px;
+            border-radius: 10px;
+            font-size: 13.5px;
+            margin-bottom: 20px;
+            display: none;
+            line-height: 1.45;
+        }
+
+        .alert-error {
+            background-color: var(--danger-bg);
+            color: var(--danger-text);
+            border: 1px solid var(--danger-border);
+        }
+
+        .alert-success {
+            background-color: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid var(--success-border);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 7px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-focus);
+            background: var(--bg-card);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+        .toggle-password:hover {
+            color: var(--text-main);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 13px;
+            background: var(--primary);
+            background-image: var(--grad-primary);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14.5px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 8px;
+            box-shadow: 0 6px 18px rgba(212, 89, 55, 0.32);
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .btn-submit:hover {
+            filter: brightness(1.08);
+            transform: translateY(-1px);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        .demo-section {
+            margin-top: 26px;
+            padding-top: 22px;
+            border-top: 1px dashed var(--border);
+        }
+
+        .demo-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .demo-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .demo-chip {
+            flex: 1;
+            min-width: 105px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: var(--chip-bg);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .demo-chip:hover {
+            background: var(--chip-hover);
+            border-color: var(--primary);
+        }
+
+        .demo-chip span {
+            font-size: 10.5px;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <button type="button" class="theme-toggle-btn" id="themeToggle" title="Switch Theme" aria-label="Toggle theme">
+        &#9790;
+    </button>
+
+    <div class="login-wrapper">
+        <div class="login-card">
+
+            <div class="brand-header">
+                <div class="brand-icon">P</div>
+                <h1>Project Management Tool</h1>
+                <p>Sign in to access your role-based workspace</p>
+            </div>
+
+            <!-- Error/Status Alert Box -->
+            <div id="alertBox" class="alert-box"></div>
+
+            <form action="login" method="post" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-wrapper">
+                        <input type="email" id="email" name="email" class="input-field" placeholder="Enter your email" required autofocus autocomplete="username">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" class="input-field" placeholder="Enter your password" required autocomplete="current-password">
+                        <button type="button" class="toggle-password" id="togglePasswordBtn">Show</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitBtn">Sign In</button>
+            </form>
+
+
+
+            <div class="footer-note">
+                Project Management System &bull; Milestone Review 1
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // Theme Management aligned with dashboard.css
+            const body = document.body;
+            const themeToggle = document.getElementById("themeToggle");
+            let savedTheme = "light";
+
+            try {
+                const storedTheme = localStorage.getItem("pms-theme");
+                if (storedTheme === "dark" || storedTheme === "light") {
+                    savedTheme = storedTheme;
+                }
+            } catch (e) {}
+
+            function applyTheme(theme) {
+                body.setAttribute("data-theme", theme);
+                if (themeToggle) {
+                    themeToggle.innerHTML = theme === "dark" ? "&#9728;" : "&#9790;";
+                }
+            }
+            applyTheme(savedTheme);
+
+            if (themeToggle) {
+                themeToggle.addEventListener("click", function() {
+                    const current = body.getAttribute("data-theme") || "light";
+                    const next = current === "dark" ? "light" : "dark";
+                    applyTheme(next);
+                    try { localStorage.setItem("pms-theme", next); } catch (e) {}
+                });
+            }
+
+            // Show / Hide Password
+            const passwordInput = document.getElementById("password");
+            const togglePasswordBtn = document.getElementById("togglePasswordBtn");
+            if (togglePasswordBtn && passwordInput) {
+                togglePasswordBtn.addEventListener("click", function() {
+                    const isPassword = passwordInput.getAttribute("type") === "password";
+                    passwordInput.setAttribute("type", isPassword ? "text" : "password");
+                    togglePasswordBtn.textContent = isPassword ? "Hide" : "Show";
+                });
+            }
+
+            // Check URL query params for status messages
+            const urlParams = new URLSearchParams(window.location.search);
+            const alertBox = document.getElementById("alertBox");
+
+            if (alertBox) {
+                if (urlParams.get("error") === "invalid_credentials") {
+                    alertBox.textContent = "Invalid email or password. Please verify your credentials.";
+                    alertBox.className = "alert-box alert-error";
+                    alertBox.style.display = "block";
+                } else if (urlParams.get("error") === "maintenance") {
+                    alertBox.textContent = "The system is under maintenance. Only administrators can sign in right now.";
+                    alertBox.className = "alert-box alert-error";
+                    alertBox.style.display = "block";
+                } else if (urlParams.get("error") === "invalid_role") {
+                    alertBox.textContent = "Your account does not have an active dashboard role assigned.";
+                    alertBox.className = "alert-box alert-error";
+                    alertBox.style.display = "block";
+                } else if (urlParams.get("logged_out") === "true") {
+                    alertBox.textContent = "You have successfully signed out.";
+                    alertBox.className = "alert-box alert-success";
+                    alertBox.style.display = "block";
+                }
+            }
+        })();
+
+        // Demo Autofill helper
+        function fillCredentials(email, password) {
+            document.getElementById("email").value = email;
+            document.getElementById("password").value = password;
+            document.getElementById("submitBtn").focus();
+        }
+    </script>
+</body>
+</html>

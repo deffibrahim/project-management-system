@@ -1,0 +1,53 @@
+### Build output ###
+target/
+out/
+*.war
+*.class
+*.log
+
+### Secrets / local configuration (never upload) ###
+.env
+.env.*
+!.env.example
+*.local
+
+### IntelliJ IDEA (machine-specific) ###
+.idea/
+*.iws
+*.iml
+*.ipr
+.smarttomcat/
+
+### Maven ###
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### Kotlin ###
+.kotlin
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+
+### OS files ###
+.DS_Store
+Thumbs.db
