@@ -1,4 +1,3 @@
-
 package com.pms.filter;
 
 import com.pms.model.User;
@@ -56,6 +55,24 @@ public class AuthenticationFilter implements Filter {
                         || path.startsWith("/css/");
 
         if (publicPage) {
+
+            /*
+             * Prevent browser caching of authentication-related
+             * pages, especially after logout.
+             */
+            httpResponse.setHeader(
+                    "Cache-Control",
+                    "no-cache, no-store, must-revalidate"
+            );
+            httpResponse.setHeader(
+                    "Pragma",
+                    "no-cache"
+            );
+            httpResponse.setDateHeader(
+                    "Expires",
+                    0
+            );
+
             chain.doFilter(request, response);
             return;
         }
@@ -64,12 +81,49 @@ public class AuthenticationFilter implements Filter {
          * Everything else requires authentication.
          */
         if (!loggedIn) {
+
+            /*
+             * Prevent the browser from displaying a cached
+             * authenticated page after logout.
+             */
+            httpResponse.setHeader(
+                    "Cache-Control",
+                    "no-cache, no-store, must-revalidate"
+            );
+            httpResponse.setHeader(
+                    "Pragma",
+                    "no-cache"
+            );
+            httpResponse.setDateHeader(
+                    "Expires",
+                    0
+            );
+
             httpResponse.sendRedirect(
                     httpRequest.getContextPath()
                             + "/index.html"
             );
             return;
         }
+
+        /*
+         * User is authenticated.
+         *
+         * Do NOT allow the browser to cache protected pages.
+         * This is the important fix for the Back-button issue.
+         */
+        httpResponse.setHeader(
+                "Cache-Control",
+                "no-cache, no-store, must-revalidate"
+        );
+        httpResponse.setHeader(
+                "Pragma",
+                "no-cache"
+        );
+        httpResponse.setDateHeader(
+                "Expires",
+                0
+        );
 
         String role = user.getRole();
 
