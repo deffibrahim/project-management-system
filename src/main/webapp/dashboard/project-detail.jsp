@@ -4,11 +4,11 @@
 <h2>Project Details</h2>
 <c:if test="${not empty project}">
     <div class="project-info">
-        <h3>${project.title}</h3>
-        <p>${project.description}</p>
-        <p><strong>Manager:</strong> ${project.managerId}</p>
-        <p><strong>Start:</strong> ${project.startDate}</p>
-        <p><strong>End:</strong> ${project.endDate}</p>
+        <h3><c:out value="${project.title}"/></h3>
+        <p><c:out value="${project.description}"/></p>
+        <p><strong>Manager:</strong> <c:out value="${project.managerId}"/></p>
+        <p><strong>Start:</strong> <c:out value="${project.startDate}"/></p>
+        <p><strong>End:</strong> <c:out value="${project.endDate}"/></p>
     </div>
     <h3>Tasks</h3>
     <a href="${pageContext.request.contextPath}/tasks/create?projectId=${project.projectId}" class="form-button">+ Add Task</a>
@@ -20,9 +20,9 @@
             <tbody>
                 <c:forEach var="task" items="${tasks}">
                     <tr>
-                        <td>${task.title}</td>
-                        <td>${task.status}</td>
-                        <td>${task.assigneeId}</td>
+                        <td><c:out value="${task.title}"/></td>
+                        <td><c:out value="${task.status}"/></td>
+                        <td><c:out value="${task.assigneeId}"/></td>
                         <td>
                             <a href="${pageContext.request.contextPath}/tasks/edit?id=${task.taskId}&projectId=${project.projectId}">Edit</a>
                             <form action="${pageContext.request.contextPath}/tasks/delete" method="post" style="display:inline;">

@@ -1,0 +1,43 @@
+<%-- Shared role-aware sidebar for feature pages. Included statically by kanban.jsp and deadlines.jsp. --%>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-mark">P</div>
+    <div><p class="brand-name">Project Management</p><p class="brand-subtitle">Workspace</p></div>
+  </div>
+  <p class="sidebar-label">Workspace</p>
+  <nav class="sidebar-nav" aria-label="Workspace navigation">
+    <% String featureRole = currentUser == null || currentUser.getRole() == null ? "TEAM_MEMBER" : currentUser.getRole().toUpperCase();
+       String featureDashboard = "ADMIN".equals(featureRole) ? "/dashboard/admin" : ("PROJECT_MANAGER".equals(featureRole) ? "/dashboard/project-manager" : "/dashboard/team-member"); %>
+    <a href="<%=ctx + featureDashboard%>" class="sidebar-link"><span class="sidebar-icon">&#9632;</span>Dashboard</a>
+    <a href="<%=ctx%>/projects" class="sidebar-link"><span class="sidebar-icon">&#128193;</span>Projects</a>
+    <a href="<%=ctx%>/tasks" class="sidebar-link"><span class="sidebar-icon">&#9745;</span>Tasks</a>
+    <a href="<%=ctx%>/kanban" class="sidebar-link <%= "kanban".equals(activeFeature) ? "active" : "" %>" <%= "kanban".equals(activeFeature) ? "aria-current=\"page\"" : "" %>><span class="sidebar-icon">&#9638;</span>Kanban board</a>
+    <a href="<%=ctx%>/deadlines" class="sidebar-link <%= "deadlines".equals(activeFeature) ? "active" : "" %>" <%= "deadlines".equals(activeFeature) ? "aria-current=\"page\"" : "" %>><span class="sidebar-icon">&#9200;</span>Due-date alerts</a>
+    <% if ("ADMIN".equals(featureRole) || "PROJECT_MANAGER".equals(featureRole)) { %>
+      <a href="<%=ctx%>/workload" class="sidebar-link"><span class="sidebar-icon">&#128202;</span>Workload</a>
+    <% } %>
+  </nav>
+  <% if ("ADMIN".equals(featureRole)) { %>
+    <p class="sidebar-label">Administration</p>
+    <nav class="sidebar-nav" aria-label="Administration navigation">
+      <a href="<%=ctx%>/users" class="sidebar-link"><span class="sidebar-icon">&#128101;</span>Users</a>
+      <a href="<%=ctx%>/settings" class="sidebar-link"><span class="sidebar-icon">&#9881;</span>Settings</a>
+    </nav>
+  <% } else { %>
+    <p class="sidebar-label">Preferences</p>
+    <nav class="sidebar-nav" aria-label="Preferences navigation">
+      <a href="<%=ctx%>/settings" class="sidebar-link"><span class="sidebar-icon">&#9881;</span>Settings</a>
+    </nav>
+  <% } %>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <p class="sidebar-user-name"><%=HtmlUtil.escape(currentUser == null || currentUser.getName() == null ? "Account" : currentUser.getName())%></p>
+      <p class="sidebar-user-role"><%=HtmlUtil.escape(featureRole.replace('_',' '))%></p>
+    </div>
+    <form action="<%=ctx%>/logout" method="post" class="sidebar-logout-form" style="margin:0">
+      <input type="hidden" name="csrfToken" value="<%=HtmlUtil.escape(String.valueOf(session.getAttribute("csrfToken")))%>">
+      <button type="submit" class="sidebar-logout" style="border:0;background:transparent;width:100%;font:inherit;text-align:left;cursor:pointer">&#10140; Logout</button>
+    </form>
+  </div>
+</aside>

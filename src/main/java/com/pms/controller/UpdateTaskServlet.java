@@ -415,6 +415,13 @@ public class UpdateTaskServlet extends HttpServlet {
             }
         }
 
+        // Team members may only change the status of their task.
+        if ("TEAM_MEMBER".equals(role)) {
+            title = existingTask.getTitle();
+            description = existingTask.getDescription();
+            parsedDueDate = existingTask.getDueDate();
+        }
+
         Task task = new Task();
 
         task.setTaskId(taskId);

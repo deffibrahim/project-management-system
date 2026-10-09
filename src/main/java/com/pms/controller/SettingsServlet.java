@@ -185,6 +185,7 @@ public class SettingsServlet extends BaseServlet {
         User fresh = userDAO.getUserById(account.getUserId());
 
         if (fresh != null) {
+            fresh.setPassword(null); // never keep the password hash in the session
             request.getSession().setAttribute("user", fresh);
         }
 
@@ -316,7 +317,11 @@ public class SettingsServlet extends BaseServlet {
         if (stored.startsWith("$2a$")
                 || stored.startsWith("$2b$")
                 || stored.startsWith("$2y$")) {
-            return PasswordUtil.checkPassword(entered, stored);
+            try {
+                return PasswordUtil.checkPassword(entered, stored);
+            } catch (IllegalArgumentException malformedHash) {
+                return false;
+            }
         }
 
         return stored.equals(entered);

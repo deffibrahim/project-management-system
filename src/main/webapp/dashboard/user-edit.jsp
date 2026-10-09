@@ -1,18 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/dashboard/header.jsp" %>
 <h2>Edit User</h2>
 <c:if test="${not empty user}">
-<form action="${pageContext.request.contextPath}/users/edit" method="post">
+<form action="${pageContext.request.contextPath}/users/update" method="post">
     <input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}" />
-    <input type="hidden" name="id" value="${user.userId}" />
+    <input type="hidden" name="userId" value="${user.userId}" />
     <div class="form-group">
         <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" value="${user.name}" required maxlength="100" />
+        <input type="text" id="name" name="name" value="${fn:escapeXml(user.name)}" required maxlength="100" />
     </div>
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="email" id="email" name="email" value="${user.email}" required maxlength="100" />
+        <input type="email" id="email" name="email" value="${fn:escapeXml(user.email)}" required maxlength="100" />
     </div>
     <div class="form-group">
         <label for="role">Role</label>

@@ -16,7 +16,15 @@ public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response)
             throws ServletException, IOException {
+        response.setHeader("Allow", "POST");
+        response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED, "Use POST to log out.");
+    }
 
+    @Override
+    protected void doPost(HttpServletRequest request,
+                          HttpServletResponse response)
+            throws ServletException, IOException {
+        // CsrfFilter validates the session token before this method runs.
         // Prevent the browser from caching the logout response
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");

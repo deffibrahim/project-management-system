@@ -235,4 +235,20 @@ public class TaskDAO {
 
         return tasks;
     }
+    // Read tasks belonging to a single project.
+    public List<Task> getTasksByProjectId(int projectId) {
+        List<Task> tasks = new ArrayList<>();
+        String sql = "SELECT * FROM tasks WHERE project_id = ? ORDER BY task_id DESC";
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, projectId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) tasks.add(mapTask(resultSet));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tasks;
+    }
+
 }

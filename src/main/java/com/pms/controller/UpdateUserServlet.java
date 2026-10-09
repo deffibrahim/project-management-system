@@ -189,7 +189,7 @@ public class UpdateUserServlet extends HttpServlet {
         if (password != null
                 && !password.isEmpty()) {
 
-            if (password.length() < 6) {
+            if (password.length() < com.pms.util.AppSettings.getMinPasswordLength()) {
 
                 response.sendError(
                         HttpServletResponse.SC_BAD_REQUEST,

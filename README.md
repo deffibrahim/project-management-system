@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Tomcat-10.1-yellow" alt="Tomcat 10.1">
   <img src="https://img.shields.io/badge/MySQL-8-4479A1" alt="MySQL">
   <img src="https://img.shields.io/badge/Maven-build-C71A36" alt="Maven">
-  <img src="https://img.shields.io/badge/Status-Review%201-green" alt="Review 1">
+  <img src="https://img.shields.io/badge/Status-Review%202-green" alt="Review 2">
 </p>
 
 ---
@@ -25,15 +25,17 @@
 - [Database](#database)
 - [How to run](#how-to-run)
 - [Test logins](#test-logins)
-- [Planned for Review 2](#planned-for-review-2)
+- [Planned for later](#planned-for-later)
 
 ## About
 
 Most small teams keep track of their work in chats and sheets, and things get lost. This project puts it all in one place. Admins set up users and projects, project managers break projects into tasks and give them to people, and team members update their tasks as they work.
 
-It is built with Java servlets and JSP on the backend, MySQL for the data, and runs on Tomcat. This repo is the **Review 1** version.
+It is built with Java servlets and JSP on the backend, MySQL for the data, and runs on Tomcat. This repo is the **Review 2** version.
 
 ## Screenshots
+
+Put the images in `docs/screenshots/` with the file names below.
 
 <table>
   <tr>
@@ -43,6 +45,14 @@ It is built with Java servlets and JSP on the backend, MySQL for the data, and r
   <tr>
     <td align="center"><b>Project manager dashboard</b><br><img src="docs/screenshots/project-manager.png" alt="Project manager dashboard"></td>
     <td align="center"><b>Team member dashboard</b><br><img src="docs/screenshots/team-member.png" alt="Team member dashboard"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Kanban board</b><br><img src="docs/screenshots/kanban.png" alt="Kanban board"></td>
+    <td align="center"><b>Due-date alerts</b><br><img src="docs/screenshots/deadlines.png" alt="Due-date alerts"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Workload</b><br><img src="docs/screenshots/workload.png" alt="Workload page"></td>
+    <td></td>
   </tr>
 </table>
 
@@ -57,15 +67,20 @@ It is built with Java servlets and JSP on the backend, MySQL for the data, and r
 Other things:
 - Login and logout with sessions
 - Task priority (low to urgent), due dates and assignee
+- **Kanban board** (`/kanban`): tasks grouped into Pending, In progress and Completed. Each role sees only the tasks it is allowed to see
+- **Due-date alerts** (`/deadlines`): overdue tasks, tasks due in the next 3 days, and open tasks with no due date, calculated live from the task records
+- Workload page showing how many open tasks each person has
 - Profile page and personal preferences (landing page, hide completed tasks)
-- Dark and light theme
+- Dark and light theme, using the same toggle button on every page
 
 **Security**
 - Passwords are hashed with jBCrypt
-- CSRF token check on every form that changes data
+- CSRF token check on every form that changes data (logout is a POST form too)
 - A filter sends you back to login if you open a dashboard page without signing in
+- Project and task pages check ownership or assignment before showing or changing anything
 - PreparedStatements in all DAO classes, so no SQL injection
 - Output is escaped to stop XSS
+- The password hash is never kept in the session
 - The database login comes from environment variables and is not written in the code
 
 ## Tech stack
@@ -143,9 +158,8 @@ By default the app connects to `jdbc:mysql://localhost:3306/pms_db` as `root` wi
 | Team member | john@pms.com | member123 |
 | Team member | sarah@pms.com | member123 |
 
-## Planned for Review 2
+## Planned for later
 
-- Kanban board for tasks
 - Charts on the dashboards
 - File attachments on tasks
 - Activity log

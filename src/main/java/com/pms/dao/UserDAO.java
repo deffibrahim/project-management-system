@@ -12,6 +12,10 @@ public class UserDAO {
 
     public User loginUser(String email, String password) {
 
+        if (email == null || email.isBlank() || password == null || password.isEmpty()) {
+            return null;
+        }
+
         String sql = "SELECT * FROM users WHERE email = ?";
 
         try (Connection conn = DBConnection.getConnection();
@@ -60,8 +64,13 @@ public class UserDAO {
                 /*
                  * New BCrypt-based login.
                  */
-                if (PasswordUtil.checkPassword(password, storedPassword)) {
-                    return user;
+                try {
+                    if (PasswordUtil.checkPassword(password, storedPassword)) {
+                        return user;
+                    }
+                } catch (IllegalArgumentException malformedHash) {
+                    // A malformed stored hash must fail closed, not break login.
+                    return null;
                 }
             }
 
@@ -164,7 +173,7 @@ public class UserDAO {
                 user.setUserId(rs.getInt("user_id"));
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
-                user.setPassword(rs.getString("password"));
+                // Do not load password hashes for list views / selectors.
                 user.setRole(rs.getString("role"));
 
                 users.add(user);
@@ -209,12 +218,9 @@ public class UserDAO {
          */
         String password = user.getPassword();
 
-        if (!password.startsWith("$2a$")
-                && !password.startsWith("$2b$")
-                && !password.startsWith("$2y$")) {
-
-            password = PasswordUtil.hashPassword(password);
-        }
+        // updateUser receives a plain password from forms. Always hash it;
+        // never trust a bcrypt-looking user-supplied value as a stored hash.
+        password = PasswordUtil.hashPassword(password);
 
         String sql =
                 "UPDATE users SET name = ?, email = ?, password = ?, role = ? WHERE user_id = ?";

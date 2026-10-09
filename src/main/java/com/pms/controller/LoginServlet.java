@@ -26,6 +26,15 @@ public class LoginServlet extends HttpServlet {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
 
+        if (email == null || password == null
+                || email.trim().isEmpty() || password.isEmpty()
+                || email.length() > 254 || password.length() > 1024) {
+            resp.sendRedirect(req.getContextPath()
+                    + "/index.html?error=invalid_credentials");
+            return;
+        }
+        email = email.trim().toLowerCase(java.util.Locale.ROOT);
+
         UserDAO userDAO = new UserDAO();
         User user = userDAO.loginUser(email, password);
 
@@ -61,6 +70,8 @@ public class LoginServlet extends HttpServlet {
                     AppSettings.getSessionTimeoutMinutes() * 60
             );
 
+            // The session needs identity and role only, never the stored password hash.
+            user.setPassword(null);
             session.setAttribute("user", user);
             session.setAttribute("role", user.getRole());
 

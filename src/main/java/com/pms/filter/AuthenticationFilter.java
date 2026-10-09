@@ -34,6 +34,12 @@ public class AuthenticationFilter implements Filter {
                         httpRequest.getContextPath().length()
                 );
 
+        // Baseline browser security headers for every application response.
+        httpResponse.setHeader("X-Content-Type-Options", "nosniff");
+        httpResponse.setHeader("X-Frame-Options", "DENY");
+        httpResponse.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+        httpResponse.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+
         HttpSession session =
                 httpRequest.getSession(false);
 
@@ -141,6 +147,8 @@ public class AuthenticationFilter implements Filter {
                         || path.equals("/settings/delete")
                         || path.equals("/dashboard/users.jsp")
                         || path.equals("/dashboard/create-user.jsp")
+                        || path.equals("/dashboard/user-create.jsp")
+                        || path.equals("/dashboard/user-edit.jsp")
                         || path.equals("/dashboard/edit-user.jsp")
                         || path.equals("/dashboard/edit-setting.jsp");
 

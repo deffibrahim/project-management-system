@@ -36,7 +36,7 @@ public class UserManagementServlet extends BaseServlet {
         } else if ("/edit".equals(path)) {
             int id = Integer.parseInt(req.getParameter("id"));
             User user = userDAO.getUserById(id);
-            req.setAttribute("editUser", user);
+            req.setAttribute("user", user);
             req.getRequestDispatcher("/dashboard/user-edit.jsp").forward(req, resp);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -75,9 +75,9 @@ public class UserManagementServlet extends BaseServlet {
                 user.setName(req.getParameter("name"));
                 user.setEmail(req.getParameter("email"));
                 String newPass = req.getParameter("password");
-                if (newPass != null && !newPass.isEmpty()) {
-                    user.setPassword(newPass); // DAO will hash if needed
-                }
+                // getUserById() returns the stored hash; clear it unless a new password was typed,
+                // otherwise updateUser() would hash the hash and lock the user out.
+                user.setPassword(newPass != null && !newPass.isEmpty() ? newPass : null);
                 user.setRole(req.getParameter("role"));
                 userDAO.updateUser(user);
             }

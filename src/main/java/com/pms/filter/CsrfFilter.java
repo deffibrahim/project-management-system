@@ -58,6 +58,7 @@ public class CsrfFilter implements Filter {
          */
         if ("POST".equalsIgnoreCase(method)
                 || "PUT".equalsIgnoreCase(method)
+                || "PATCH".equalsIgnoreCase(method)
                 || "DELETE".equalsIgnoreCase(method)) {
 
             HttpSession session =

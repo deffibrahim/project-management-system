@@ -41,6 +41,8 @@
 
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/css/dashboard.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/ui-polish.css">
+
 </head>
 
 <body>
@@ -108,6 +110,16 @@
                 Tasks
 
             </a>
+            <a href="${pageContext.request.contextPath}/kanban" class="sidebar-link">
+                <span class="sidebar-icon">&#9638;</span>
+                Kanban board
+            </a>
+
+            <a href="${pageContext.request.contextPath}/deadlines" class="sidebar-link">
+                <span class="sidebar-icon">&#9200;</span>
+                Due-date alerts
+            </a>
+
 
             <a href="${pageContext.request.contextPath}/workload"
                class="sidebar-link">
@@ -171,12 +183,11 @@
             </div>
 
 
-            <a href="${pageContext.request.contextPath}/logout"
-               class="sidebar-logout">
+            <form action="${pageContext.request.contextPath}/logout" method="post" class="sidebar-logout-form" style="margin:0;"><input type="hidden" name="csrfToken" value="${sessionScope.csrfToken}"><button type="submit" class="sidebar-logout" style="border:0;background:transparent;width:100%;font:inherit;text-align:left;cursor:pointer;">
 
                 &#10140; Logout
 
-            </a>
+            </button></form>
 
         </div>
 
